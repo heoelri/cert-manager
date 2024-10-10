@@ -51,6 +51,9 @@
         "enableServiceLinks": {
           "$ref": "#/$defs/helm-values.enableServiceLinks"
         },
+        "enabled": {
+          "$ref": "#/$defs/helm-values.enabled"
+        },
         "extraArgs": {
           "$ref": "#/$defs/helm-values.extraArgs"
         },
@@ -510,7 +513,7 @@
       "type": "object"
     },
     "helm-values.cainjector.serviceAccount.annotations": {
-      "description": "Optional additional annotations to add to the controller's Service Account.",
+      "description": "Optional additional annotations to add to the cainjector's Service Account.",
       "type": "object"
     },
     "helm-values.cainjector.serviceAccount.automountServiceAccountToken": {
@@ -576,7 +579,7 @@
     },
     "helm-values.config": {
       "default": {},
-      "description": "This property is used to configure options for the controller pod. This allows setting options that would usually be provided using flags.\n\nIf `apiVersion` and `kind` are unspecified they default to the current latest version (currently `controller.config.cert-manager.io/v1alpha1`). You can pin the version by specifying the `apiVersion` yourself.\n\nFor example:\nconfig:\n  apiVersion: controller.config.cert-manager.io/v1alpha1\n  kind: ControllerConfiguration\n  logging:\n    verbosity: 2\n    format: text\n  leaderElectionConfig:\n    namespace: kube-system\n  kubernetesAPIQPS: 9000\n  kubernetesAPIBurst: 9000\n  numberOfConcurrentWorkers: 200\n  featureGates:\n    AdditionalCertificateOutputFormats: true\n    DisallowInsecureCSRUsageDefinition: true\n    ExperimentalCertificateSigningRequestControllers: true\n    ExperimentalGatewayAPISupport: true\n    LiteralCertificateSubject: true\n    SecretsFilteredCaching: true\n    ServerSideApply: true\n    StableCertificateRequestName: true\n    UseCertificateRequestBasicConstraints: true\n    ValidateCAA: true\n  # Configure the metrics server for TLS\n  # See https://cert-manager.io/docs/devops-tips/prometheus-metrics/#tls\n  metricsTLSConfig:\n    dynamic:\n      secretNamespace: \"cert-manager\"\n      secretName: \"cert-manager-metrics-ca\"\n      dnsNames:\n      - cert-manager-metrics",
+      "description": "This property is used to configure options for the controller pod. This allows setting options that would usually be provided using flags.\n\nIf `apiVersion` and `kind` are unspecified they default to the current latest version (currently `controller.config.cert-manager.io/v1alpha1`). You can pin the version by specifying the `apiVersion` yourself.\n\nFor example:\nconfig:\n  apiVersion: controller.config.cert-manager.io/v1alpha1\n  kind: ControllerConfiguration\n  logging:\n    verbosity: 2\n    format: text\n  leaderElectionConfig:\n    namespace: kube-system\n  kubernetesAPIQPS: 9000\n  kubernetesAPIBurst: 9000\n  numberOfConcurrentWorkers: 200\n  enableGatewayAPI: true\n  # Feature gates as of v1.16.0. Listed with their default values.\n  # See https://cert-manager.io/docs/cli/controller/\n  featureGates:\n    AdditionalCertificateOutputFormats: true # BETA - default=true\n    AllAlpha: false # ALPHA - default=false\n    AllBeta: false # BETA - default=false\n    ExperimentalCertificateSigningRequestControllers: false # ALPHA - default=false\n    ExperimentalGatewayAPISupport: true # BETA - default=true\n    LiteralCertificateSubject: true # BETA - default=true\n    NameConstraints: false # ALPHA - default=false\n    OtherNames: false # ALPHA - default=false\n    SecretsFilteredCaching: true # BETA - default=true\n    ServerSideApply: false # ALPHA - default=false\n    StableCertificateRequestName: true # BETA - default=true\n    UseCertificateRequestBasicConstraints: false # ALPHA - default=false\n    UseDomainQualifiedFinalizer: false # ALPHA - default=false\n    ValidateCAA: false # ALPHA - default=false\n  # Configure the metrics server for TLS\n  # See https://cert-manager.io/docs/devops-tips/prometheus-metrics/#tls\n  metricsTLSConfig:\n    dynamic:\n      secretNamespace: \"cert-manager\"\n      secretName: \"cert-manager-metrics-ca\"\n      dnsNames:\n      - cert-manager-metrics",
       "type": "object"
     },
     "helm-values.containerSecurityContext": {
@@ -646,6 +649,11 @@
     "helm-values.enableServiceLinks": {
       "default": false,
       "description": "enableServiceLinks indicates whether information about services should be injected into the pod's environment variables, matching the syntax of Docker links.",
+      "type": "boolean"
+    },
+    "helm-values.enabled": {
+      "default": true,
+      "description": "Field that can be used as a condition when cert-manager is a dependency. This definition is only here as a placeholder such that it is included in the json schema. See https://helm.sh/docs/chart_best_practices/dependencies/#conditions-and-tags for more info.",
       "type": "boolean"
     },
     "helm-values.extraArgs": {
@@ -2008,7 +2016,7 @@
       "type": "object"
     },
     "helm-values.webhook.serviceAccount.annotations": {
-      "description": "Optional additional annotations to add to the controller's Service Account.",
+      "description": "Optional additional annotations to add to the webhook's Service Account.",
       "type": "object"
     },
     "helm-values.webhook.serviceAccount.automountServiceAccountToken": {
